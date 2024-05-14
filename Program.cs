@@ -14,6 +14,8 @@ builder.Services.AddDbContext<LazureDbContext>(options =>
 
 //For the secured connection
 var password = Environment.GetEnvironmentVariable("PASSWORD");
+//var password = builder.Configuration["PASSWORD"];
+
 
 // JWT AUTH BASIC COFIG
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -36,6 +38,7 @@ builder.Services.AddSingleton(new JwtTokenService(
     builder.Configuration["Jwt:Issuer"],
     builder.Configuration["Jwt:Audience"]));
 
+builder.Services.AddScoped<TransactionService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
