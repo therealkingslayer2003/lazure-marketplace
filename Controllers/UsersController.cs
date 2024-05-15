@@ -74,6 +74,24 @@ namespace AccountsAPI.Controllers
             return recievedPassword.Equals(password);
         }
 
+        [HttpGet("get-product-owner-wallet-by-product-id/{productId}")]
+        public ActionResult<ProductOwnerWalletResponseDto> GetProductOwnerWalletByProductId(int productId)
+        {
+            try
+            {
+                string productOwnerWalletId = userService.GetProductOwnerWalletByProductId(productId);
+                var response = new ProductOwnerWalletResponseDto() 
+                { WalletId = productOwnerWalletId };
+
+                return Ok(response);
+            }
+            catch(ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            
+        }
     }
 }
         

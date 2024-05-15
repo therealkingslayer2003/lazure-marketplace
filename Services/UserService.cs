@@ -1,5 +1,6 @@
 ﻿using AccountsAPI.DbContexts;
 using AccountsAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountsAPI.Services
@@ -44,6 +45,33 @@ namespace AccountsAPI.Services
             User? user = _dbContext.Users.FirstOrDefault(u => u.WalletId == walletId);
             return user;
         }
+        public string GetWalletIdByUser(int userId)  //Getting wallet by its user
+        {
+            User? user = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+            return user.WalletId;
+        }
 
+
+        public string GetProductOwnerWalletByProductId(int productId)
+        {
+            Product? product = _dbContext.Products.FirstOrDefault(p => p.ProductId == productId);
+
+            // Check if the product exists
+            if (product == null)
+            {
+                throw new ArgumentException($"No product found with ID {productId}");
+            }
+
+            // Find the product owner by the user ID associated with the product
+            User? user = _dbContext.Users.FirstOrDefault(u => u.UserId == product.UserId);
+
+            // Check if the user exists
+            if (user == null)
+            {
+                throw new ArgumentException($"No user found with ID {product.UserId}");
+            }
+
+            return user.WalletId;
+        }
     }
 }
