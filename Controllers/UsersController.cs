@@ -2,6 +2,7 @@
 using AccountsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using AccountsAPI.Models;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 
 namespace AccountsAPI.Controllers
 {
@@ -80,14 +81,19 @@ namespace AccountsAPI.Controllers
             try
             {
                 string productOwnerWalletId = userService.GetProductOwnerWalletByProductId(productId);
-                var response = new ProductOwnerWalletResponseDto() 
-                { WalletId = productOwnerWalletId };
+                var response = new ProductOwnerWalletResponseDto()
+                { WalletId = productOwnerWalletId, Message = "Successful"};
+
 
                 return Ok(response);
             }
             catch(ArgumentException ex)
             {
-                return NotFound(ex.Message);
+                var errorResponse = new Dictionary<string, string>
+        {
+            { "message", ex.Message }
+        };
+                return NotFound(errorResponse);
             }
 
             
