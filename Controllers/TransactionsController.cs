@@ -16,13 +16,13 @@ namespace AccountsAPI.Controllers
             this.transactionService = transactionService;
         }
 
-        [HttpPost("add-new-completed-transaction")]
-        public async Task<IActionResult> AddNewTransaction([FromBody] AddTransactionDto transactionDto)
+        [HttpPost()]
+        public IActionResult AddNewTransaction([FromBody] AddTransactionDto transactionDto)
         {
 
             try
             {
-                Transaction savedTransaction = await transactionService.AddNewTransaction(transactionDto);
+                Transaction savedTransaction = transactionService.AddNewTransaction(transactionDto);
                 return Ok(savedTransaction);
             }
             catch (Exception ex)
@@ -31,15 +31,20 @@ namespace AccountsAPI.Controllers
             }
         }
 
-        [HttpGet("get-transaction/{transactionId}")]
-        public ActionResult<Transaction> GetTransactionById(int transactionId)
-        {  
-            Transaction transaction = transactionService.GetTransactionById(transactionId);
+        //[HttpGet("/{transactionId}")]
+        //public ActionResult<Transaction> GetTransactionByTxId(string txId)
+        //{  
+        //    Transaction transaction = transactionService.GetTransactionByTxId(txId);
 
-            if (transaction == null) return NotFound("This transaction does not exist");
+        //    if (transaction == null) return NotFound("This transaction does not exist");
 
-            return Ok(transaction);
+        //    return Ok(transaction);
+        //}
+
+        [HttpGet()]
+        public List<Transaction> GetTransactionsByWalletId([FromQuery] string walletId)
+        {
+            return transactionService.GetTransactionsByWalletId(walletId);
         }
-
     }
 }

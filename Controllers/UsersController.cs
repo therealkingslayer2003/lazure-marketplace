@@ -2,7 +2,6 @@
 using AccountsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using AccountsAPI.Models;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 
 namespace AccountsAPI.Controllers
 {
@@ -23,16 +22,16 @@ namespace AccountsAPI.Controllers
         }
 
         [HttpPost("login")]         //Identification by login details(a crypto wallet unique id)
-        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
+        public IActionResult Login([FromBody] UserLoginDto userLoginDto)
         {
             if(!IsRequestAuthorized()) { return Unauthorized("The password is missing or invalid"); }
 
 
-            var user = await userService.GetUserByWalletIdAsync(userLoginDto.WalletId);
+            var user = userService.GetUserByWalletId(userLoginDto.WalletId);
 
             if(user == null)    // If first login ever
             {
-                user = await userService.AddNewUserAsync(userLoginDto.WalletId);
+                user = userService.AddNewUser(userLoginDto.WalletId);
             }
 
             var jwtToken = jwtTokenService.GenerateToken(user.UserId.ToString());

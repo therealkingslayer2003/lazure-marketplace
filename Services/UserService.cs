@@ -14,7 +14,7 @@ namespace AccountsAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<User> AddNewUserAsync(string walletId)    //Adding and saving the new user
+        public User AddNewUser(string walletId)    //Adding and saving the new user
         {
             var userToSave = new User
             {
@@ -23,8 +23,8 @@ namespace AccountsAPI.Services
 
             try
             {
-                await _dbContext.AddAsync(userToSave);
-                await _dbContext.SaveChangesAsync();
+                _dbContext.Add(userToSave);
+                _dbContext.SaveChanges();
                 return userToSave;
             }
             catch (Exception ex)
@@ -35,16 +35,12 @@ namespace AccountsAPI.Services
         }
 
 
-        public async Task<User> GetUserByWalletIdAsync(string walletId)
+        public User GetUserByWalletId(string walletId) //Getting a user by its wallet
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.WalletId == walletId);
+            return _dbContext.Users.FirstOrDefault(u => u.WalletId == walletId);
         }
 
-        public User GetUserByWalletId(string walletId)  //Getting a user by its wallet
-        {
-            User? user = _dbContext.Users.FirstOrDefault(u => u.WalletId == walletId);
-            return user;
-        }
+
         public string GetWalletIdByUser(int userId)  //Getting wallet by its user
         {
             User? user = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);

@@ -11,14 +11,14 @@ namespace AccountsAPI.Services
 
         public TransactionService(LazureDbContext dbContext)
         {
-            _dbContext = dbContext;            
+            _dbContext = dbContext;
         }
 
-        public async Task<Transaction> AddNewTransaction(AddTransactionDto transactionDto)
+        public Transaction AddNewTransaction(AddTransactionDto transactionDto)
         {
-            var seller = await _dbContext.Users.FindAsync(transactionDto.SellerId);
-            var buyer = await _dbContext.Users.FindAsync(transactionDto.BuyerId);
-            var product = await _dbContext.Products.FindAsync(transactionDto.ProductId);
+            var seller = _dbContext.Users.Find(transactionDto.SellerId);
+            var buyer = _dbContext.Users.Find(transactionDto.BuyerId);
+            var product = _dbContext.Products.Find(transactionDto.ProductId);
 
             if (seller == null || buyer == null || product == null)
             {
@@ -29,8 +29,8 @@ namespace AccountsAPI.Services
 
             try
             {
-                await _dbContext.AddAsync(transactionToSave);
-                await _dbContext.SaveChangesAsync();
+                _dbContext.Add(transactionToSave);
+                _dbContext.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -52,6 +52,22 @@ namespace AccountsAPI.Services
             var transaction = _dbContext.Transactions.FirstOrDefault(t => t.TransactionId == transactionId);
 
             return transaction;
+        }
+
+        public List<Transaction> GetTransactionsByWalletId(string walletId)
+        {
+            var user = _dbContext.Users.SingleOrDefault(u => u.WalletId.Equals(walletId));
+
+            if (user == null)
+            {
+                return new List<Transaction>(); 
+            }
+
+            var transactions = _dbContext.Transactions
+                .Where(t => t.BuyerId == user.UserId || t.SellerId == user.UserId)
+                .ToList();
+
+            return transactions;
         }
     }
 }
