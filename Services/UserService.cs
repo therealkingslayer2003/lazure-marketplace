@@ -69,5 +69,10 @@ namespace AccountsAPI.Services
 
             return user.WalletId;
         }
+
+        public User GetUserByUserId(int userId)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+        }
     }
 }

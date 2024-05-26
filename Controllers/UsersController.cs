@@ -41,7 +41,7 @@ namespace AccountsAPI.Controllers
         }
 
 
-        [HttpGet("{walletId}")]                 //Getting a user by its wallet
+        [HttpGet("/wallet/{walletId}")]                 //Getting a user by its wallet
         public ActionResult<User> GetUserByWalletId(string walletId)
         {
             if (walletId == null) return NotFound();
@@ -54,6 +54,16 @@ namespace AccountsAPI.Controllers
         
         }
 
+        [HttpGet("/user/{userId}")]                 //Getting a user by its wallet
+        public ActionResult<User> GetUserByUserId(int userId)
+        {
+            User user = userService.GetUserByUserId(userId);
+
+            if (user == null) { return NotFound("Wrong user id"); }
+
+            return Ok(user);
+
+        }
         private bool IsRequestAuthorized() //Checking decrypted password if attached
                                           //if the request is authorized
                                           //in order to ensure secured connection
