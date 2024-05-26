@@ -44,6 +44,8 @@ namespace AccountsAPI.Controllers
         [HttpGet("{walletId}")]                 //Getting a user by its wallet
         public ActionResult<User> GetUserByWalletId(string walletId)
         {
+            if (walletId == null) return NotFound();
+
             User user = userService.GetUserByWalletId(walletId);
 
             if(user == null) { return NotFound("Wrong wallet"); }
