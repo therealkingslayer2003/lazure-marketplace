@@ -18,8 +18,8 @@ namespace AccountsAPI.Models
         public virtual ICollection<Product> Products { get; set; }
         [JsonIgnore]
         public virtual ICollection<Transaction> Sales { get; set; } // Транзакции, где пользователь является продавцом
-        [JsonIgnore]
+        [JsonIgnore]    
         public virtual ICollection<Transaction> Purchases { get; set; } // Транзакции, где пользователь является покупателем
 
-    }
+    } //LAZ-57
 }
