@@ -24,7 +24,13 @@ namespace AccountsAPI.Controllers
         [HttpPost("login")]         //Identification by login details(a crypto wallet unique id)
         public IActionResult Login([FromBody] UserLoginDto userLoginDto)
         {
-            if(!IsRequestAuthorized()) { return Unauthorized("The password is missing or invalid"); }
+            if(!IsRequestAuthorized()) {
+                var errorResponse = new Dictionary<string, string>
+        {
+            { "message", "The password is missing or invalid" }
+        };
+                return Unauthorized(errorResponse); 
+            }
 
 
             var user = userService.GetUserByWalletId(userLoginDto.WalletId);
@@ -48,7 +54,13 @@ namespace AccountsAPI.Controllers
 
             User user = userService.GetUserByWalletId(walletId);
 
-            if(user == null) { return NotFound("Wrong wallet"); }
+            if(user == null) {
+                var errorResponse = new Dictionary<string, string>
+        {
+            { "message", "Wrong Wallet" }
+        };
+                return NotFound(errorResponse); 
+            }
 
             return Ok(user);
         
@@ -59,7 +71,13 @@ namespace AccountsAPI.Controllers
         {
             User user = userService.GetUserByUserId(userId);
 
-            if (user == null) { return NotFound("Wrong user id"); }
+            if (user == null) {
+                var errorResponse = new Dictionary<string, string>
+        {
+            { "message", "Wrong userId" }
+        };
+                return NotFound(errorResponse); 
+            }
 
             return Ok(user);
 
@@ -72,14 +90,12 @@ namespace AccountsAPI.Controllers
 
             if (string.IsNullOrEmpty(header) || !header.StartsWith("Bearer "))
             {
-                Console.WriteLine("error 1");   //Internal logs
                 return false;
             }
 
             var recievedPassword = header.Substring("Bearer ".Length).Trim();
             if (string.IsNullOrWhiteSpace(recievedPassword))
             {
-                Console.WriteLine("error 2");   //Internal logs
                 return false;
             }
 

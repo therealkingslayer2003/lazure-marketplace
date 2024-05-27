@@ -21,5 +21,5 @@ namespace AccountsAPI.Models
         [JsonIgnore]    
         public virtual ICollection<Transaction> Purchases { get; set; } // Транзакции, где пользователь является покупателем
 
-    } //LAZ-57
+    }
 }

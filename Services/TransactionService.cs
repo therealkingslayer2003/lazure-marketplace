@@ -1,24 +1,25 @@
 ﻿using AccountsAPI.DbContexts;
 using AccountsAPI.DTOs;
 using AccountsAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AccountsAPI.Services
 {
     public class TransactionService
     {
-        private readonly LazureDbContext _dbContext;
+        private readonly LazureDbContext dbContext;
 
         public TransactionService(LazureDbContext dbContext)
         {
-            _dbContext = dbContext;
+            this.dbContext = dbContext;
         }
 
         public Transaction AddNewTransaction(AddTransactionDto transactionDto)
         {
-            var seller = _dbContext.Users.Find(transactionDto.SellerId);
-            var buyer = _dbContext.Users.Find(transactionDto.BuyerId);
-            var product = _dbContext.Products.Find(transactionDto.ProductId);
+            var seller = dbContext.Users.Find(transactionDto.SellerId);
+            var buyer = dbContext.Users.Find(transactionDto.BuyerId);
+            var product = dbContext.Products.Find(transactionDto.ProductId);
 
             if (seller == null || buyer == null || product == null)
             {
@@ -29,8 +30,8 @@ namespace AccountsAPI.Services
 
             try
             {
-                _dbContext.Add(transactionToSave);
-                _dbContext.SaveChanges();
+                dbContext.Add(transactionToSave);
+                dbContext.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -49,25 +50,30 @@ namespace AccountsAPI.Services
 
         public Transaction GetTransactionById(int transactionId)
         {
-            var transaction = _dbContext.Transactions.FirstOrDefault(t => t.TransactionId == transactionId);
+            var transaction = dbContext.Transactions.FirstOrDefault(t => t.TransactionId == transactionId);
 
             return transaction;
         }
 
         public List<Transaction> GetTransactionsByWalletId(string walletId)
         {
-            var user = _dbContext.Users.SingleOrDefault(u => u.WalletId.Equals(walletId));
+            var user = dbContext.Users.SingleOrDefault(u => u.WalletId.Equals(walletId));
 
             if (user == null)
             {
                 return new List<Transaction>(); 
             }
 
-            var transactions = _dbContext.Transactions
+            var transactions = dbContext.Transactions
                 .Where(t => t.BuyerId == user.UserId || t.SellerId == user.UserId)
                 .ToList();
 
             return transactions;
+        }
+
+        public List<Transaction> GetTransactionsByProductId(int productId, int userId)
+        {
+            return dbContext.Transactions.Where(t => t.ProductId == productId && t.BuyerId == userId).ToList();
         }
     }
 }
