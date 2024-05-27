@@ -2,8 +2,6 @@
 
 All active endpoints: 
 
-![image](https://github.com/trashplusplus/lazure-marketplace/assets/93054726/4aa1fdb3-ea1a-497f-8e6f-02a2e85699e0)
-
-![image](https://github.com/trashplusplus/lazure-marketplace/assets/93054726/1695495a-c3d9-41ef-8200-81adbf0db51e)
+![image](https://github.com/therealkingslayer2003/lazure-marketplace/assets/93054726/53121dbd-e6d4-4eed-ad68-b88c851a92f8)
 
 
