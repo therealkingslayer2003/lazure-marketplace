@@ -52,7 +52,7 @@ namespace AccountsAPI.Models
             {
                 SellerId = transactionDto.SellerId,
                 BuyerId = transactionDto.BuyerId,
-                DateTime = transactionDto.DateTime,
+                DateTime = DateTime.SpecifyKind(transactionDto.DateTime, DateTimeKind.Utc),
                 ProductId = transactionDto.ProductId,
                 TxId = transactionDto.TxId
             };
