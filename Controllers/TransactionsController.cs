@@ -24,7 +24,7 @@ namespace AccountsAPI.Controllers
             try
             {
                 Transaction savedTransaction = transactionService.AddNewTransaction(transactionDto);
-                return Ok(savedTransaction);
+                return Ok();
             }
             catch (Exception ex)
             {
