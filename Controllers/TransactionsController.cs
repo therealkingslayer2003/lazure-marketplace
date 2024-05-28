@@ -54,7 +54,7 @@ namespace AccountsAPI.Controllers
 
         [HttpGet("my-purchases")]
         public ActionResult<List<Transaction>> GetTransactionsByCurrentUserBuyer()
-        {
+        {  
             var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
 
             if (userId == null)

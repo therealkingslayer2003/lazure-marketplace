@@ -66,6 +66,7 @@ namespace AccountsAPI.Services
 
             var transactions = dbContext.Transactions
                 .Where(t => t.BuyerId == user.UserId || t.SellerId == user.UserId)
+                .OrderByDescending(t => t.DateTime) //To always have a new transaction on top of the table
                 .ToList();
 
             return transactions;
