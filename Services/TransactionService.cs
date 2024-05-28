@@ -70,10 +70,9 @@ namespace AccountsAPI.Services
 
             return transactions;
         }
-
-        public List<Transaction> GetTransactionsByProductId(int productId, int userId)
+        public List<Transaction> GetTransactionsByCurrentUserBuyer(int userId)
         {
-            return dbContext.Transactions.Where(t => t.ProductId == productId && t.BuyerId == userId).ToList();
+            return dbContext.Transactions.Where(t => t.BuyerId == userId).ToList();
         }
     }
 }

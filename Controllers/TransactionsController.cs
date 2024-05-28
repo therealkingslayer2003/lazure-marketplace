@@ -52,8 +52,8 @@ namespace AccountsAPI.Controllers
             return transactionService.GetTransactionsByWalletId(walletId);
         }
 
-        [HttpGet("product/{productId}")]
-        public ActionResult<List<Transaction>> GetTransactionsByProductId(int productId)
+        [HttpGet("my-purchases")]
+        public ActionResult<List<Transaction>> GetTransactionsByCurrentUserBuyer()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
 
@@ -66,7 +66,8 @@ namespace AccountsAPI.Controllers
                 return Unauthorized(errorResponse);
             }
 
-            var transactions = transactionService.GetTransactionsByProductId(productId, Int32.Parse(userId));
+
+            var transactions = transactionService.GetTransactionsByCurrentUserBuyer(Int32.Parse(userId));
 
             if (transactions == null)
             {
