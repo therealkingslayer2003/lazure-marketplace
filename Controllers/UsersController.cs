@@ -125,6 +125,18 @@ namespace AccountsAPI.Controllers
 
             
         }
+        [HttpGet("get-product-owners")]
+        public ActionResult<List<ProductOwnerResponseDto>> GetProductOwners([FromQuery] int[] productId)
+        {
+            if (productId == null || productId.Length == 0)
+            {
+                var errorResponse = new Dictionary<string, string> {
+                    { "message","No product IDs provided"} };
+
+                return BadRequest(errorResponse);
+            }
+            return userService.GetProductOwners(productId);
+        }
     }
 }
         

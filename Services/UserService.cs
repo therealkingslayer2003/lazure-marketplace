@@ -1,17 +1,19 @@
 ﻿using AccountsAPI.DbContexts;
+using AccountsAPI.DTOs;
 using AccountsAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace AccountsAPI.Services
 {
     public class UserService
     {
-        private readonly LazureDbContext _dbContext;
+        private readonly LazureDbContext dbContext;
 
         public UserService(LazureDbContext dbContext)
         {
-            _dbContext = dbContext;
+            this.dbContext = dbContext;
         }
 
         public User AddNewUser(string walletId)    //Adding and saving the new user
@@ -23,8 +25,8 @@ namespace AccountsAPI.Services
 
             try
             {
-                _dbContext.Add(userToSave);
-                _dbContext.SaveChanges();
+                dbContext.Add(userToSave);
+                dbContext.SaveChanges();
                 return userToSave;
             }
             catch (Exception ex)
@@ -37,20 +39,20 @@ namespace AccountsAPI.Services
 
         public User GetUserByWalletId(string walletId) //Getting a user by its wallet
         {
-            return _dbContext.Users.FirstOrDefault(u => u.WalletId == walletId);
+            return dbContext.Users.FirstOrDefault(u => u.WalletId == walletId);
         }
 
 
         public string GetWalletIdByUser(int userId)  //Getting wallet by its user
         {
-            User? user = _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+            User? user = dbContext.Users.FirstOrDefault(u => u.UserId == userId);
             return user.WalletId;
         }
 
 
         public string GetProductOwnerWalletByProductId(int productId)
         {
-            Product? product = _dbContext.Products.FirstOrDefault(p => p.ProductId == productId);
+            Product? product = dbContext.Products.FirstOrDefault(p => p.ProductId == productId);
 
             // Check if the product exists
             if (product == null)
@@ -59,7 +61,7 @@ namespace AccountsAPI.Services
             }
 
             // Find the product owner by the user ID associated with the product
-            User? user = _dbContext.Users.FirstOrDefault(u => u.UserId == product.UserId);
+            User? user = dbContext.Users.FirstOrDefault(u => u.UserId == product.UserId);
 
             // Check if the user exists
             if (user == null)
@@ -72,7 +74,23 @@ namespace AccountsAPI.Services
 
         public User GetUserByUserId(int userId)
         {
-            return _dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+            return dbContext.Users.FirstOrDefault(u => u.UserId == userId);
+        }
+
+        public List<ProductOwnerResponseDto> GetProductOwners(int[] productId)
+        {
+            return dbContext.Products
+            .Where(p => productId.Contains(p.ProductId))
+            .Join(
+                dbContext.Users,
+                product => product.UserId,
+                user => user.UserId,
+                (product, user) => new ProductOwnerResponseDto
+                {
+                    ProductId = product.ProductId,
+                    WalletId = user.WalletId
+                })
+            .ToList(); 
         }
     }
 }
