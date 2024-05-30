@@ -41,7 +41,7 @@ namespace AccountsAPI.Models
 
         public Transaction() { }
 
-        public static Transaction CreateFromDto(AddTransactionDto transactionDto)   //Fabric method
+        public static Transaction CreateFromDto(TransactionDto transactionDto)   //Fabric method
         {
             if (transactionDto == null)
             {

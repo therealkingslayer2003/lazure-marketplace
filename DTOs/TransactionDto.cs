@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AccountsAPI.DTOs
 {
-    public class AddTransactionDto
+    public class TransactionDto
     {
         [Required]
         public int SellerId { get; set; }

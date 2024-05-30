@@ -15,7 +15,7 @@ namespace AccountsAPI.Services
             this.dbContext = dbContext;
         }
 
-        public Transaction AddNewTransaction(AddTransactionDto transactionDto)
+        public Transaction AddNewTransaction(TransactionDto transactionDto)
         {
             var seller = dbContext.Users.Find(transactionDto.SellerId);
             var buyer = dbContext.Users.Find(transactionDto.BuyerId);
