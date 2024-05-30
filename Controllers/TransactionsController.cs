@@ -3,6 +3,8 @@ using AccountsAPI.Models;
 using AccountsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AccountsAPI.Controllers
 {
@@ -18,7 +20,7 @@ namespace AccountsAPI.Controllers
         }
 
         [HttpPost()]
-        public IActionResult AddNewTransaction([FromBody] AddTransactionDto transactionDto)
+        public IActionResult AddNewTransaction([FromBody] TransactionDto transactionDto)
         {
 
             try
@@ -81,9 +83,11 @@ namespace AccountsAPI.Controllers
             return Ok(transactions);
         }
         [HttpPost("test")]
-        public ActionResult<Transaction> Test([FromBody] AddTransactionDto transactionDto)
+        public ActionResult<TransactionDto> Test([FromBody] TransactionDto transactionDto)
         {
-            return Transaction.CreateFromDto(transactionDto);
+            Console.WriteLine(transactionDto.DateTime.ToString());
+            return transactionDto;
         }
+        
     }
 }
