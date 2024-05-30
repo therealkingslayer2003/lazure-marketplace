@@ -137,6 +137,7 @@ namespace AccountsAPI.Controllers
             }
             return userService.GetProductOwners(productId);
         }
+        
     }
 }
         

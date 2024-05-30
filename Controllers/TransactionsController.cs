@@ -80,5 +80,10 @@ namespace AccountsAPI.Controllers
 
             return Ok(transactions);
         }
+        [HttpPost("test")]
+        public ActionResult<Transaction> Test([FromBody] AddTransactionDto transactionDto)
+        {
+            return Transaction.CreateFromDto(transactionDto);
+        }
     }
 }
